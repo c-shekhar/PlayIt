@@ -1,0 +1,20 @@
+<script src="//js.pusher.com/3.0/pusher.min.js"></script>
+<script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
+<script>
+var pusher = new Pusher('5130eac739325a024e28');
+var channel = pusher.subscribe('notifications');
+var eventName = 'new_notification';
+    	
+var callback = function(data){
+    var tracks = data.songs;
+    var track_id_to_play = tracks[tracks.length-1];
+    var track_url = "/tracks/" + track_id_to_play.toString();	
+    SC.initialize({
+  		client_id: '98185dd646f78421963744faa9144ffa'
+	});
+    SC.stream(track_url).then(function(player){
+  		player.play();
+	});	
+};
+channel.bind(eventName, callback);	
+</script>
